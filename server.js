@@ -39,23 +39,26 @@ connectDB();
 
 // --------------------- Middleware Setup ---------------------
 const allowedOrigins = [
-  "http://localhost:3000",
-  "https://online-movie-ticket-booking-frontend-pj7x2q9y2.vercel.app"
+  "http://localhost:3000", // local development
+  "https://online-movie-ticket-booking-frontend-pj7x2q9y2.vercel.app", // your deployed frontend
+  "https://online-movie-ticket-booking-frontend-46lsu9qbo.vercel.app" // additional frontend URL if needed
 ];
 
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (like Postman)
+      // allow requests with no origin (like Postman or CURL)
       if (!origin) return callback(null, true);
+
       if (allowedOrigins.indexOf(origin) === -1) {
-        const msg = "The CORS policy for this site does not allow access from the specified Origin.";
+        const msg = "❌ The CORS policy for this site does not allow access from the specified Origin.";
         return callback(new Error(msg), false);
       }
+
       return callback(null, true);
     },
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+    credentials: true
   })
 );
 
@@ -69,7 +72,6 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/reviews", reviewRoutes);
 
 // --------------------- Production Deployment ---------------------
-// Note: Frontend is deployed separately on Vercel, so no static file serving here
 if (process.env.NODE_ENV !== "production") {
   // Serve static files from frontend/public in development
   app.use(express.static(path.join(__dirname, "../frontend/public")));
@@ -90,7 +92,7 @@ app.use((err, req, res, next) => {
   const statusCode = res.statusCode === 200 ? 500 : res.statusCode;
   res.status(statusCode).json({
     message: err.message,
-    stack: process.env.NODE_ENV === "production" ? null : err.stack,
+    stack: process.env.NODE_ENV === "production" ? null : err.stack
   });
 });
 
