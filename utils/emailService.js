@@ -1,5 +1,4 @@
 const nodemailer = require('nodemailer');
-
 // 1. Create a transporter object (using environment variables from .env)
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -8,7 +7,6 @@ const transporter = nodemailer.createTransport({
         pass: process.env.EMAIL_PASS,
     },
 });
-
 // --- NEW FUNCTION: Send Welcome Email ---
 const sendRegistrationWelcome = async (userEmail, userName) => {
     const mailOptions = {
@@ -31,7 +29,6 @@ const sendRegistrationWelcome = async (userEmail, userName) => {
             </div>
         `,
     };
-
     try {
         await transporter.sendMail(mailOptions);
         console.log(`[EMAIL] Welcome email sent to ${userEmail}`);
@@ -41,14 +38,14 @@ const sendRegistrationWelcome = async (userEmail, userName) => {
     }
 };
 // ------------------------------------------
-
 // 2. Function to send a booking confirmation email
 const sendBookingConfirmation = async (userEmail, bookingDetails) => {
     const mailOptions = {
         from: `Movie Booking System <${process.env.EMAIL_USER}>`,
         to: userEmail,
         subject: '🎟️ Booking Confirmation - MERN Movie Booking',
-        text: `Your booking has been confirmed!\n\nMovie: ${bookingDetails.movieTitle}\nShowtime: ${bookingDetails.showtime}\nSeats: ${bookingDetails.seats.join(', ')}\nTotal: $${bookingDetails.totalAmount}\n\nEnjoy your movie!`,
+        // --- FIX: Changed 'totalAmount' to 'totalPrice' ---
+        text: `Your booking has been confirmed!\n\nMovie: ${bookingDetails.movieTitle}\nShowtime: ${bookingDetails.showtime}\nSeats: ${bookingDetails.seats.join(', ')}\nTotal: $${bookingDetails.totalPrice}\n\nEnjoy your movie!`,
         html: `
             <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd;">
                 <h2 style="color: #28a745;">Booking Confirmed!</h2>
@@ -57,14 +54,14 @@ const sendBookingConfirmation = async (userEmail, bookingDetails) => {
                     <p><strong>Movie:</strong> ${bookingDetails.movieTitle}</p>
                     <p><strong>Showtime:</strong> ${bookingDetails.showtime}</p>
                     <p><strong>Seats:</strong> ${bookingDetails.seats.join(', ')}</p>
-                    <p><strong>Total Amount:</strong> $${bookingDetails.totalAmount}</p>
+                    {/* --- FIX: Changed 'totalAmount' to 'totalPrice' --- */}
+                    <p><strong>Total Amount:</strong> $${bookingDetails.totalPrice}</p>
                 </div>
                 <p>Please arrive at the theater 15 minutes before showtime.</p>
                 <p style="margin-top: 20px; font-size: 12px; color: #777;">Enjoy your movie experience!</p>
             </div>
         `,
     };
-
     try {
         await transporter.sendMail(mailOptions);
         console.log(`[EMAIL] Booking confirmation sent to ${userEmail}`);
@@ -72,7 +69,6 @@ const sendBookingConfirmation = async (userEmail, bookingDetails) => {
         console.error(`[EMAIL ERROR] Failed to send booking confirmation to ${userEmail}:`, error);
     }
 };
-
 // 3. Function to send a password reset email
 const sendPasswordResetEmail = async (userEmail, resetURL) => {
     const mailOptions = {
@@ -94,7 +90,6 @@ const sendPasswordResetEmail = async (userEmail, resetURL) => {
             </div>
         `,
     };
-
     try {
         await transporter.sendMail(mailOptions);
         console.log(`[EMAIL] Password reset email sent to ${userEmail}`);
@@ -102,7 +97,6 @@ const sendPasswordResetEmail = async (userEmail, resetURL) => {
         console.error(`[EMAIL ERROR] Failed to send password reset email to ${userEmail}:`, error);
     }
 };
-
 module.exports = { 
     sendBookingConfirmation, 
     sendPasswordResetEmail,

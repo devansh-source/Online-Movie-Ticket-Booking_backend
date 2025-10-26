@@ -1,5 +1,4 @@
 const QRCode = require('qrcode');
-
 // Function to generate QR code for a booking
 const generateQRCode = async (bookingId, bookingDetails) => {
     try {
@@ -11,7 +10,6 @@ const generateQRCode = async (bookingId, bookingDetails) => {
             seats: bookingDetails.seats,
             totalPrice: bookingDetails.totalPrice,
         });
-
         // Generate QR code as a data URL (base64 image)
         const qrCodeUrl = await QRCode.toDataURL(qrData);
         return qrCodeUrl;
@@ -20,5 +18,4 @@ const generateQRCode = async (bookingId, bookingDetails) => {
         throw new Error('Failed to generate QR code');
     }
 };
-
 module.exports = { generateQRCode };
