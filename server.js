@@ -38,9 +38,22 @@ const connectDB = async () => {
 connectDB();
 
 // --------------------- Middleware Setup ---------------------
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://online-movie-ticket-booking-frontend-pj7x2q9y2.vercel.app"
+];
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000",
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg = "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
