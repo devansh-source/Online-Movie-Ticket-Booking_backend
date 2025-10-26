@@ -16,10 +16,13 @@ const app = express();
 // --------------------- Middleware Setup ---------------------
 const allowedOrigins = [
   "http://localhost:3000", // local development
-  // 🚨 CRITICAL FIX: Add the clean production Vercel URL blocked in the last screenshot
-  "https://online-movie-ticket-booking-frontend.vercel.app", 
   
-  // Existing temporary Vercel URLs (kept for alias/preview deploys)
+  // 🚨 CRITICAL FIXES: ALL DEPLOYED VERCEL FRONTEND URLS
+  // 1. Newest temporary URL (from last error)
+  "https://online-movie-ticket-booking-frontend-8xyhqpaot.vercel.app", 
+  // 2. Production/Main URL
+  "https://online-movie-ticket-booking-frontend.vercel.app", 
+  // 3. Previously blocked temporary URLs (keep for robustness)
   "https://online-movie-ticket-booking-frontend.d8jjx0s.vercel.app", 
   "https://online-movie-ticket-booking-frontend-pj7x2q9y2.vercel.app",
   "https://online-movie-ticket-booking-frontend-46lsu9qbo.vercel.app"
@@ -47,7 +50,7 @@ app.use(express.json());
 
 // --------------------- API Routes ---------------------
 app.use("/api/auth", authRoutes);
-app.use("/api/movies", movieRoutes); // <-- Endpoint for movies
+app.use("/api/movies", movieRoutes); 
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/reviews", reviewRoutes);
