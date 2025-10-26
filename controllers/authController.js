@@ -63,8 +63,8 @@ const forgotPassword = asyncHandler(async (req, res) => {
     const resetToken = user.getResetPasswordToken();
     await user.save({ validateBeforeSave: false });
 
-    // Use the frontend port (3000) for the reset link
-    const resetURL = `http://localhost:3000/reset-password/${resetToken}`; 
+    // Use the frontend URL for the reset link
+    const resetURL = `${process.env.FRONTEND_URL || 'http://localhost:3000'}/reset-password/${resetToken}`;
     
     try {
         await sendPasswordResetEmail(user.email, resetURL);

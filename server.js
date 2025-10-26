@@ -56,14 +56,8 @@ app.use("/api/admin", adminRoutes);
 app.use("/api/reviews", reviewRoutes);
 
 // --------------------- Production Deployment ---------------------
-if (process.env.NODE_ENV === "production") {
-  const __dirname1 = path.resolve();
-  app.use(express.static(path.join(__dirname1, "/frontend/build")));
-
-  app.get("*", (req, res) =>
-    res.sendFile(path.resolve(__dirname1, "frontend", "build", "index.html"))
-  );
-} else {
+// Note: Frontend is deployed separately on Vercel, so no static file serving here
+if (process.env.NODE_ENV !== "production") {
   // Serve static files from frontend/public in development
   app.use(express.static(path.join(__dirname, "../frontend/public")));
 
