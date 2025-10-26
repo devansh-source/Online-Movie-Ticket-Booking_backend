@@ -53,6 +53,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/movies", movieRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/reviews", reviewRoutes);
 
 // --------------------- Production Deployment ---------------------
 if (process.env.NODE_ENV === "production") {
